@@ -115,8 +115,8 @@ namespace Hangfire.MAMQSqlExtension
 
                 string queue = recurringJobId switch
                 {
-					null => _sqlServerConnection.GetJobParameter(id, "Queue")?.Replace("\"", "") ?? "default",
-					_ => _sqlServerConnection.GetValueFromHash($"recurring-job:{recurringJobId}", "Queue") ?? "default"
+                    null => _sqlServerConnection.GetJobParameter(id, "Queue")?.Replace("\"", "") ?? "default",
+                    _ => _sqlServerConnection.GetValueFromHash($"recurring-job:{recurringJobId}", "Queue") ?? "default"
                 };
 
                 return _queues.Contains(queue);
@@ -209,19 +209,19 @@ namespace Hangfire.MAMQSqlExtension
             return _sqlServerConnection.GetAllItemsFromList(key);
         }
 
-		public override KeyValuePair<string, long>[] GetSetCount([NotNull] string[] keys, int limit)
-		{
-			return _sqlServerConnection.GetSetCount(keys, limit);
-		}
+        public override bool GetSetContains([NotNull] string key, [NotNull] string value)
+        {
+            return _sqlServerConnection.GetSetContains(key, value);
+        }
 
-		public override DateTime GetUtcDateTime()
-		{
-			return _sqlServerConnection.GetUtcDateTime();
-		}
-
-		public override bool SetContains([NotNull] string key, [NotNull] string value)
-		{
-			return _sqlServerConnection.SetContains(key, value);
-		}
-	}
+        public override long GetSetCount([NotNull] IEnumerable<string> keys, int limit)
+        {
+            return _sqlServerConnection.GetSetCount(keys, limit);
+        }
+        
+        public override DateTime GetUtcDateTime()
+        {
+            return _sqlServerConnection.GetUtcDateTime();
+        }
+    }
 }
